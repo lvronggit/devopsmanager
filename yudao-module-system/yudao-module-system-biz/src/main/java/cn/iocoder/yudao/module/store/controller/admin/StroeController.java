@@ -42,7 +42,7 @@ public class StroeController {
 
     @PostMapping("/create")
     @Operation(summary = "创建门店")
-   // @PreAuthorize("@ss.hasPermission('system:post:create')")
+    // @PreAuthorize("@ss.hasPermission('system:post:create')")
     public CommonResult<JshStroeReSVO> createPost(@Valid @RequestBody JshStroeReqVO createReqVO) {
         JshStroeReSVO jshStroeReSVO = jshStroeService.create(createReqVO);
         return success(jshStroeReSVO);
@@ -52,14 +52,14 @@ public class StroeController {
     @PostMapping("/page")
     @Operation(summary = "查询门店列表")
     // @PreAuthorize("@ss.hasPermission('system:post:create')")
-    public CommonResult<List<JshStroeDetailResVO>> listStorePage(@Valid @RequestBody JshStorePageReqVO jshStorePageReqVO) {
+    public CommonResult<PageResult<JshStroeDetailResVO>> listStorePage(@Valid @RequestBody JshStorePageReqVO jshStorePageReqVO) {
         Long loginUserId = WebFrameworkUtils.getLoginUserId();
         // 管理员可以查出所有的门店
         Integer loginUserType = WebFrameworkUtils.getLoginUserType();
-        if(!UserTypeEnum.ADMIN.getValue().equals(loginUserType)){
+        if (!UserTypeEnum.ADMIN.getValue().equals(loginUserType)) {
             loginUserId = null;
         }
-        List<JshStroeDetailResVO> jshStroeReSVO = jshStroeService.selectStore(jshStorePageReqVO,loginUserId);
+        PageResult<JshStroeDetailResVO> jshStroeReSVO = jshStroeService.selectStore(jshStorePageReqVO, loginUserId);
         return success(jshStroeReSVO);
     }
 

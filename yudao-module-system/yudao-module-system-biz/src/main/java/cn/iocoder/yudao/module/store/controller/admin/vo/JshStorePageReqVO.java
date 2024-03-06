@@ -25,6 +25,4 @@ public class JshStorePageReqVO extends PageParam {
     @Schema(description = "门店编号", example = "yudao")
     private String number;
 
-    @Schema(description = "门店id", example = "1")
-    private Integer id;
 }
