@@ -4121,3 +4121,122 @@ INSERT INTO `system_users` (`id`, `username`, `password`, `nickname`, `remark`, 
 COMMIT;
 
 SET FOREIGN_KEY_CHECKS = 1;
+
+
+DROP TABLE IF EXISTS `jsh_store`;
+CREATE TABLE `jsh_store` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `number` VARCHAR(50) NULL COMMENT '门店编号',
+  `name` VARCHAR(128) NOT NULL COMMENT '门店名',
+  `address` VARCHAR(512) NOT NULL COMMENT '门店地址',
+  `legal_person` VARCHAR(45)  NOT NULL COMMENT '门店法人',
+  `initial_amount` decimal(24,6) DEFAULT NULL COMMENT '投入资金',
+  `remark` VARCHAR(512) DEFAULT NULL COMMENT '描述',
+   `tenant_id` bigint NOT NULL DEFAULT 0 COMMENT '租户编号',
+  `creator` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updater` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+  UNIQUE INDEX `number_UNIQUE` (`number` ASC) VISIBLE,
+  PRIMARY KEY (`id`)
+  )ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='门店信息';
+
+
+DROP TABLE IF EXISTS `jsh_store_shareholder`;
+CREATE TABLE `jsh_store_shareholder` (
+ `id` int NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `store_number` varchar(50) NOT NULL COMMENT '门店编号',
+  `shareholder_id` VARCHAR(45) NULL COMMENT '股东id',
+  `shareholder_name` VARCHAR(128) NOT NULL COMMENT '门店名',
+  `percentage` VARCHAR(32) NOT NULL COMMENT '持股比例',
+  `phone` VARCHAR(45)  NOT NULL COMMENT '电话',
+  `investment` decimal(24,6) DEFAULT NULL COMMENT '投入资金（元）',
+   `tenant_id` bigint NOT NULL DEFAULT 0 COMMENT '租户编号',
+  `creator` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updater` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+   INDEX `index_store_number` (`store_number`),
+  PRIMARY KEY (`id`)
+  )ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='门店股东信息';
+
+
+
+DROP TABLE IF EXISTS `jsh_store_clerk`;
+CREATE TABLE `jsh_store_clerk` (
+ `id` int NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `store_number` varchar(50) NOT NULL COMMENT '门店编号',
+  `clerk_id` VARCHAR(45) NULL COMMENT '电源id',
+  `shareholder_name` VARCHAR(128) NOT NULL COMMENT '门店名',
+  `phone` VARCHAR(45)  NOT NULL COMMENT '电话',
+  `monthly_salary` decimal(24,6) NOT NULL COMMENT '每月工资（元）',
+  `id_card` VARCHAR(45)  NOT NULL COMMENT '身份证',
+  `gender` VARCHAR(8)  NOT NULL COMMENT '男/女',
+  `joined_date` VARCHAR(8)  NOT NULL COMMENT '入职日期20240101',
+  `depart_date` VARCHAR(8)  NOT NULL COMMENT '离职日期20240101',
+  `employed` VARCHAR(8)  NOT NULL COMMENT '是否在职（是/否）',
+  `address` VARCHAR(256)  NOT NULL COMMENT '住址',
+   `tenant_id` bigint NOT NULL DEFAULT 0 COMMENT '租户编号',
+  `creator` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updater` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+   INDEX `index_store_number` (`store_number`),
+  PRIMARY KEY (`id`)
+  )ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='门店店员信息';
+
+
+
+
+DROP TABLE IF EXISTS `jsh_account`;
+CREATE TABLE `jsh_account` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `number` varchar(50) NOT NULL COMMENT '账户编号',
+  `store_number` varchar(50) NOT NULL COMMENT '门店编号',
+  `name` varchar(50) DEFAULT NULL COMMENT '名称',
+  `serial_no` varchar(50) DEFAULT NULL COMMENT '编号',
+  `initial_amount` decimal(24,6) DEFAULT NULL COMMENT '期初金额',
+  `current_amount` decimal(24,6) DEFAULT NULL COMMENT '当前余额',
+  `remark` varchar(100) DEFAULT NULL COMMENT '备注',
+  `enabled` bit(1) DEFAULT NULL COMMENT '启用',
+  `sort` varchar(10) DEFAULT NULL COMMENT '排序',
+  `is_default` bit(1) DEFAULT NULL COMMENT '是否默认',
+ `tenant_id` bigint NOT NULL DEFAULT 0 COMMENT '租户编号',
+  `creator` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updater` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+  PRIMARY KEY (`id`),
+  KEY `index_store_number` (`store_number`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='账户信息';
+
+DROP TABLE IF EXISTS `jsh_account_head`;
+CREATE TABLE `jsh_account_head` (
+  `id` int NOT NULL AUTO_INCREMENT COMMENT '主键',
+  `type` varchar(50) NOT NULL COMMENT '类型(支出/收入/收款/付款/转账)',
+  `organ_id` bigint(20) DEFAULT NULL COMMENT '单位Id(收款/付款单位)',
+  `hands_person_id` bigint(20) DEFAULT NULL COMMENT '经手人id',
+  `change_amount` decimal(24,6) DEFAULT NULL COMMENT '变动金额(优惠/收款/付款/实付)',
+  `discount_money` decimal(24,6) DEFAULT NULL COMMENT '优惠金额',
+  `total_price` decimal(24,6) DEFAULT NULL COMMENT '合计金额',
+  `account_number` varchar(50) DEFAULT NULL COMMENT '账户(收款/付款)',
+  `bill_no` varchar(50) DEFAULT NULL COMMENT '单据编号',
+  `bill_time` datetime DEFAULT NULL COMMENT '单据日期',
+  `remark` varchar(1000) DEFAULT NULL COMMENT '备注',
+  `file_name` varchar(500) DEFAULT NULL COMMENT '附件名称',
+  `status` varchar(1) DEFAULT NULL COMMENT '状态，0未审核、1已审核、9审核中',
+  `source` varchar(1) DEFAULT '0' COMMENT '单据来源，0-pc，1-手机',
+  `tenant_id` bigint NOT NULL DEFAULT 0 COMMENT '租户编号',
+  `delete_flag` int DEFAULT '0' COMMENT '删除标记，0未删除，1删除',
+  `creator` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '创建者',
+  `create_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
+  `updater` varchar(64) CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci NULL DEFAULT '' COMMENT '更新者',
+  `update_time` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP COMMENT '更新时间',
+  `deleted` bit(1) NOT NULL DEFAULT b'0' COMMENT '是否删除',
+  PRIMARY KEY (`id`),
+  KEY `index_account_number` (`account_number`)
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8mb4 COMMENT='财务主表';
