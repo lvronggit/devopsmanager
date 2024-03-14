@@ -49,10 +49,6 @@ public class JshStoreClerkDO extends BaseDO {
     private String phone;
 
     /**
-     * 投入资金
-     */
-    private BigDecimal investment;
-    /**
      * '身份证
      */
     private String idCard;
