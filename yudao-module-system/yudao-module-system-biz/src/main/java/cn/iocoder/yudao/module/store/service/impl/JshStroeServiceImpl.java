@@ -2,17 +2,16 @@ package cn.iocoder.yudao.module.store.service.impl;
 
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.common.util.collection.CollectionUtils;
-import cn.iocoder.yudao.module.store.dal.dataobject.JshStoreClerkDO;
-import cn.iocoder.yudao.module.store.dal.dataobject.JshStroeShareholderDO;
-import cn.iocoder.yudao.module.store.dal.mysql.JshStoreClerkMapper;
-import com.google.common.collect.Lists;
-
 import cn.iocoder.yudao.module.store.controller.admin.vo.*;
 import cn.iocoder.yudao.module.store.dal.dataobject.JshStroeDO;
+import cn.iocoder.yudao.module.store.dal.dataobject.JshStroeShareholderDO;
 import cn.iocoder.yudao.module.store.dal.mysql.JshStoreMapper;
 import cn.iocoder.yudao.module.store.dal.mysql.JshStroeShareholderMapper;
+import cn.iocoder.yudao.module.store.service.JshStroeClerkService;
 import cn.iocoder.yudao.module.store.service.JshStroeService;
+import cn.iocoder.yudao.module.store.service.JshStroeShareHolderService;
 import cn.iocoder.yudao.module.util.AutoOrder;
+import com.google.common.collect.Lists;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,8 +29,11 @@ public class JshStroeServiceImpl implements JshStroeService {
     private JshStoreMapper jshStoreMapper;
     @Autowired
     private JshStroeShareholderMapper jshStroeShareholderMapper;
+
     @Autowired
-    private JshStoreClerkMapper jshStoreClerkMapper;
+    private JshStroeShareHolderService jshStroeShareHolderService;
+    @Autowired
+    private JshStroeClerkService jshStroeClerkService;
 
     @Override
     public JshStroeReSVO create(JshStroeReqVO jshStroeReqVO) {
@@ -93,13 +95,8 @@ public class JshStroeServiceImpl implements JshStroeService {
             jshStroeDOS = jshStroeDOPageResult.getList();
         }
         List<JshStroeDetailResVO> jshStroeDetailResVOS = new ArrayList<>();
-        JshStroeDetailResVO jshStroeDetail;
         for (JshStroeDO jshStroeDO : jshStroeDOS) {
-            jshStroeDetail = new JshStroeDetailResVO();
-            BeanUtils.copyProperties(jshStroeDO,jshStroeDetail);
-            // 查询门店信息
-            jshStroeDetail.setInitialAmount(jshStroeDO.getInitialAmount().toString());
-            jshStroeDetailResVOS.add(jshStroeDetail);
+            jshStroeDetailResVOS.add(storeDetail(jshStroeDO.getNumber()));
         }
         jshStroeDetailResVO.setList(jshStroeDetailResVOS);
 
@@ -110,14 +107,16 @@ public class JshStroeServiceImpl implements JshStroeService {
     private JshStroeDetailResVO storeDetail(String number) {
         // 门店信息
         JshStroeDO jshStroeDO = jshStoreMapper.selectByNumber(number);
-        // 股东信息
-        List<JshStroeShareholderDO> jshStroeShareholderDOS = jshStroeShareholderMapper.selectByStoreNumbers(Lists.newArrayList(number));
-        // 店员
-        List<JshStoreClerkDO> jshStoreClerkDOS = jshStoreClerkMapper.selecByStoreNumber(number);
-
         JshStroeDetailResVO jshStroeDetailResVO = new JshStroeDetailResVO();
-        BeanUtils.copyProperties(jshStroeDO,jshStroeDetailResVO);
-
+        BeanUtils.copyProperties(jshStroeDO, jshStroeDetailResVO);
+        // 查询门店信息
+        jshStroeDetailResVO.setInitialAmount(jshStroeDO.getInitialAmount().toString());
+        // 股东信息
+        List<JshStroeShareholderReSVO> jshStroeShareholderReSVOS = jshStroeShareHolderService.selectByStorenumber(number);
+        jshStroeDetailResVO.setJshStroeShareholderReSVOS(jshStroeShareholderReSVOS);
+        // 店员
+        List<JshStroeClerkReSVO> jshStroeClerkReSVOS = jshStroeClerkService.selectByStoreNumber(number);
+        jshStroeDetailResVO.setJshStroeClerkReSVOS(jshStroeClerkReSVOS);
         return jshStroeDetailResVO;
     }
 

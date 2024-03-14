@@ -10,11 +10,27 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 @Slf4j
 @Service
 public class JshStroeShareHolderServiceImpl implements JshStroeShareHolderService {
     @Autowired
     private JshStroeShareholderMapper jshStroeShareholderMapper;
+
+    @Override
+    public List<JshStroeShareholderReSVO> selectByStorenumber(String storeNumber) {
+        List<JshStroeShareholderDO> jshStroeShareholderDOS = jshStroeShareholderMapper.selectByStoreNumbers(Arrays.asList(storeNumber));
+        List<JshStroeShareholderReSVO> jshStroeShareholderReSVOS = new ArrayList<>();
+        for (JshStroeShareholderDO jshStroeShareholderDO: jshStroeShareholderDOS) {
+            JshStroeShareholderReSVO jshStroeShareholderReSVO = BeanUtils.toBean(jshStroeShareholderDO, JshStroeShareholderReSVO.class);
+            jshStroeShareholderReSVOS.add(jshStroeShareholderReSVO);
+        }
+        return jshStroeShareholderReSVOS;
+    }
+
 
     /**
      * 新增股东信息

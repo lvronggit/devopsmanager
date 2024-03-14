@@ -37,7 +37,7 @@ public class JshStroeShareholderReSVO {
     /**
      * 投入资金
      */
-    private BigDecimal investment;
+    private String investment;
 
 
 }

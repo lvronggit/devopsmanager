@@ -34,16 +34,12 @@ public class JshStroeClerkReSVO {
     /**
      * '每月工资（元）'
      */
-    private BigDecimal monthlySalary;
+    private String monthlySalary;
     /**
-     * 股东电话
+     * 电话
      */
     private String phone;
 
-    /**
-     * 投入资金
-     */
-    private BigDecimal investment;
     /**
      * '身份证
      */
