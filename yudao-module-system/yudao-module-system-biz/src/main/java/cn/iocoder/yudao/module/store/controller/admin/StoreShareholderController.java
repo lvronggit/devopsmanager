@@ -4,10 +4,11 @@ import cn.iocoder.yudao.framework.common.enums.UserTypeEnum;
 import cn.iocoder.yudao.framework.common.pojo.CommonResult;
 import cn.iocoder.yudao.framework.common.pojo.PageResult;
 import cn.iocoder.yudao.framework.web.core.util.WebFrameworkUtils;
-import cn.iocoder.yudao.module.store.controller.admin.vo.*;
-import cn.iocoder.yudao.module.store.service.JshStroeClerkService;
+import cn.iocoder.yudao.module.store.controller.admin.vo.JshStorePageReqVO;
+import cn.iocoder.yudao.module.store.controller.admin.vo.JshStroeDetailResVO;
+import cn.iocoder.yudao.module.store.controller.admin.vo.JshStroeReSVO;
+import cn.iocoder.yudao.module.store.controller.admin.vo.JshStroeReqVO;
 import cn.iocoder.yudao.module.store.service.JshStroeService;
-import cn.iocoder.yudao.module.store.service.JshStroeShareHolderService;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
@@ -22,18 +23,14 @@ import javax.validation.Valid;
 
 import static cn.iocoder.yudao.framework.common.pojo.CommonResult.success;
 
-@Tag(name = "门店管理 - 门店信息")
+@Tag(name = "门店管理 - ")
 @RestController
 @RequestMapping("/store/manager")
 @Validated
 @Slf4j
-public class StroeController {
+public class StoreShareholderController {
     @Autowired
     private JshStroeService jshStroeService;
-    @Autowired
-    private JshStroeShareHolderService jshStroeShareHolderService;
-    @Autowired
-    private JshStroeClerkService jshStroeClerkService;
 
     @PostMapping("/create")
     @Operation(summary = "创建门店")
@@ -59,46 +56,13 @@ public class StroeController {
     }
 
 
-
-    @PostMapping("/addstroeclerk")
-    @Operation(summary = "新增店员信息")
-    // @PreAuthorize("@ss.hasPermission('system:post:create')")
-    public CommonResult<JshStroeClerkReSVO> addStroeClerk(@Valid @RequestBody AddJshStroeClerkReqVO addJshStroeClerkReqVO) {
-        JshStroeClerkReSVO jshStroeClerkReSVO = jshStroeClerkService.add(addJshStroeClerkReqVO);
-        return success(jshStroeClerkReSVO);
-    }
-
-
-    @PostMapping("/updatestroeclerk")
-    @Operation(summary = "新增店员信息")
-    // @PreAuthorize("@ss.hasPermission('system:post:create')")
-    public CommonResult<JshStroeClerkReSVO> updateStroeClerk(@Valid @RequestBody UpdateJshStroeClerkReqVO updateJshStroeClerkReqVO) {
-        JshStroeClerkReSVO jshStroeClerkReSVO = jshStroeClerkService.updateById(updateJshStroeClerkReqVO);
-        return success(jshStroeClerkReSVO);
-    }
-
-
-
-
-
     @PostMapping("/addStoreShareholder")
     @Operation(summary = "新增股东信息")
     // @PreAuthorize("@ss.hasPermission('system:post:create')")
-    public CommonResult<JshStroeShareholderReSVO> addStoreShareholder(@Valid @RequestBody AddJshStroeShareholderReqVO addJshStroeShareholderReqVO) {
-        JshStroeShareholderReSVO jshStroeReSVO = jshStroeShareHolderService.add(addJshStroeShareholderReqVO);
+    public CommonResult<JshStroeReSVO> addStoreShareholder(@Valid @RequestBody JshStroeReqVO createReqVO) {
+        JshStroeReSVO jshStroeReSVO = jshStroeService.create(createReqVO);
         return success(jshStroeReSVO);
     }
-
-
-    @PostMapping("/updateStoreShareholder")
-    @Operation(summary = "新增股东信息")
-    // @PreAuthorize("@ss.hasPermission('system:post:create')")
-    public CommonResult<JshStroeShareholderReSVO> updateStoreShareholder(@Valid @RequestBody AddJshStroeShareholderReqVO addJshStroeShareholderReqVO) {
-        JshStroeShareholderReSVO jshStroeReSVO = jshStroeShareHolderService.updateById(addJshStroeShareholderReqVO);
-        return success(jshStroeReSVO);
-    }
-
-
 
 
 }

@@ -2,6 +2,8 @@ package cn.iocoder.yudao.module.store.controller.admin.vo;
 
 import lombok.Data;
 
+import java.util.List;
+
 /**
  * 门店信息表
  */
@@ -15,7 +17,6 @@ public class JshStroeDetailResVO {
     private String number;
     /**
      * 门店名
-     *
      */
     private String name;
 
@@ -40,5 +41,10 @@ public class JshStroeDetailResVO {
      */
     private String remark;
 
+
+    private List<JshStroeShareholderReSVO> jshStroeShareholderReSVOS;
+
+
+    private List<JshStroeClerkReSVO> jshStroeClerkReSVOS;
 
 }
