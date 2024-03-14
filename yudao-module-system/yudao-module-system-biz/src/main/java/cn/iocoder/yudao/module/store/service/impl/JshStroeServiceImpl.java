@@ -93,10 +93,13 @@ public class JshStroeServiceImpl implements JshStroeService {
             jshStroeDOS = jshStroeDOPageResult.getList();
         }
         List<JshStroeDetailResVO> jshStroeDetailResVOS = new ArrayList<>();
-
+        JshStroeDetailResVO jshStroeDetail;
         for (JshStroeDO jshStroeDO : jshStroeDOS) {
+            jshStroeDetail = new JshStroeDetailResVO();
+            BeanUtils.copyProperties(jshStroeDO,jshStroeDetail);
             // 查询门店信息
-            jshStroeDetailResVOS.add(storeDetail(jshStroeDO.getNumber()));
+            jshStroeDetail.setInitialAmount(jshStroeDO.getInitialAmount().toString());
+            jshStroeDetailResVOS.add(jshStroeDetail);
         }
         jshStroeDetailResVO.setList(jshStroeDetailResVOS);
 
@@ -113,6 +116,7 @@ public class JshStroeServiceImpl implements JshStroeService {
         List<JshStoreClerkDO> jshStoreClerkDOS = jshStoreClerkMapper.selecByStoreNumber(number);
 
         JshStroeDetailResVO jshStroeDetailResVO = new JshStroeDetailResVO();
+        BeanUtils.copyProperties(jshStroeDO,jshStroeDetailResVO);
 
         return jshStroeDetailResVO;
     }
